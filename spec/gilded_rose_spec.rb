@@ -48,7 +48,7 @@ describe GildedRose do
         expect(stage_pass.quality).to eq(0) 
       end
       context "10 days or less" do
-        it "increases in quality" do
+        it "increases in quality by 2" do
           stage_pass = Item.new("Backstage passes to a TAFKAL80ETC concert",10,40)
           gilded_rose = GildedRose.new([stage_pass])
           expect{gilded_rose.update_quality}.to change{stage_pass.quality}.from(40).to(42)
@@ -60,7 +60,7 @@ describe GildedRose do
         end
       end
       context "5 days or less" do
-        it "increases in quality" do
+        it "increases in quality by 3" do
           stage_pass = Item.new("Backstage passes to a TAFKAL80ETC concert",5,40)
           gilded_rose = GildedRose.new([stage_pass])
           expect{gilded_rose.update_quality}.to change{stage_pass.quality}.from(40).to(43)
@@ -103,7 +103,6 @@ describe GildedRose do
     end
     context "Sulfuras" do
       it "does not decrease sell_in count" do
-        stage_pass = Item.new("Backstage passes to a TAFKAL80ETC concert",10,40)
         sulfuras = Item.new("Sulfuras, Hand of Ragnaros",100,80)
         gilded_rose = GildedRose.new([sulfuras])
         expect{gilded_rose.update_quality}.to_not change{sulfuras.sell_in}
