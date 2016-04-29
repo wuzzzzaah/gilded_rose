@@ -9,4 +9,11 @@ describe Item do
     end
   end
 
+  describe "#to_s" do
+    it "returns readable name sell_in and quality" do
+      new_item = Item.new("item_name","item_sell_in","item_quality")
+      expect(new_item.to_s).to eq("item_name, item_sell_in, item_quality")
+    end
+  end
+
 end
