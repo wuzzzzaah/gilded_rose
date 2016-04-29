@@ -117,24 +117,24 @@ describe GildedRose do
     end
     context "Conjured Item" do
       it "degrades in quality" do
-        conjured_item = Item.new("item_1",10,50)
+        conjured_item = Item.new("Conjured Item",10,50)
         gilded_rose = GildedRose.new([conjured_item])
         expect{gilded_rose.update_quality}.to change{conjured_item.quality}.from(50).to(48)
       end
       it "decreases sell_in count" do
-        conjured_item = Item.new("item_1",10,50)
+        conjured_item = Item.new("Conjured Item",10,50)
         gilded_rose = GildedRose.new([conjured_item])
         expect{gilded_rose.update_quality}.to change{conjured_item.sell_in}.from(10).to(9)
       end
       it "never sets quality to less than 0" do
-        conjured_item = Item.new("item_1",10,50)
+        conjured_item = Item.new("Conjured Item",10,50)
         gilded_rose = GildedRose.new([conjured_item])
         51.times{gilded_rose.update_quality}
         expect(conjured_item.quality).to eq(0) 
       end
       context "sell date has passsed" do
         it "degrades in quality twice as fast" do
-          conjured_item = Item.new("item_1",-1,50)
+          conjured_item = Item.new("Conjured Item",-1,50)
           gilded_rose = GildedRose.new([conjured_item])
           expect{gilded_rose.update_quality}.to change{conjured_item.quality}.from(50).to(46)
         end
