@@ -32,15 +32,27 @@ describe GildedRose do
         51.times{gilded_rose.update_quality}
         expect(item.quality).to eq(0) 
       end
+      context "sell date has passsed" do
+        it "degrades in quality twice as fast" do
+          item = Item.new("item_1",-1,50)
+          gilded_rose = GildedRose.new([item])
+          expect{gilded_rose.update_quality}.to change{item.quality}.from(50).to(48)
+        end
+      end
     end
     context "Stage Pass" do
+      it "sets quality to 0 after due date" do
+        stage_pass = Item.new("Backstage passes to a TAFKAL80ETC concert",0,40)
+        gilded_rose = GildedRose.new([stage_pass])
+        gilded_rose.update_quality
+        expect(stage_pass.quality).to eq(0) 
+      end
       context "10 days or less" do
         it "increases in quality" do
           stage_pass = Item.new("Backstage passes to a TAFKAL80ETC concert",10,40)
           gilded_rose = GildedRose.new([stage_pass])
           expect{gilded_rose.update_quality}.to change{stage_pass.quality}.from(40).to(42)
         end
-      
         it "decreases sell_in count" do
           stage_pass = Item.new("Backstage passes to a TAFKAL80ETC concert",10,40)
           gilded_rose = GildedRose.new([stage_pass])
@@ -71,25 +83,17 @@ describe GildedRose do
           expect{gilded_rose.update_quality}.to change{stage_pass.sell_in}.from(11).to(10)
         end
       end
-      
-      it "decreases sell_in count" do
-        stage_pass = Item.new("Backstage passes to a TAFKAL80ETC concert",10,40)
-        gilded_rose = GildedRose.new([stage_pass])
-        expect{gilded_rose.update_quality}.to change{stage_pass.sell_in}.from(10).to(9)
-      end
-      it "never sets quality to less than 0" do
-        stage_pass = Item.new("Backstage passes to a TAFKAL80ETC concert",10,40)
-        gilded_rose = GildedRose.new([stage_pass])
-        51.times{gilded_rose.update_quality}
-        expect(stage_pass.quality).to eq(0) 
-      end
     end
-
     context "Aged Brie" do
       it "increases in quality" do
         aged_brie = Item.new("Aged Brie",10,40)
         gilded_rose = GildedRose.new([aged_brie])
         expect{gilded_rose.update_quality}.to change{aged_brie.quality}.from(40).to(41)
+      end
+      it "does not go above 50 quality" do
+        aged_brie = Item.new("Aged Brie",10,40)
+        gilded_rose = GildedRose.new([aged_brie])
+        expect{11.times{gilded_rose.update_quality}}.to change{aged_brie.quality}.from(40).to(50)
       end
       it "decreases sell_in count" do
         aged_brie = Item.new("Aged Brie",10,40)
@@ -97,7 +101,6 @@ describe GildedRose do
         expect{gilded_rose.update_quality}.to change{aged_brie.sell_in}.from(10).to(9)
       end
     end
-
     context "Sulfuras" do
       it "does not decrease sell_in count" do
         stage_pass = Item.new("Backstage passes to a TAFKAL80ETC concert",10,40)
@@ -112,7 +115,30 @@ describe GildedRose do
         expect(sulfuras.quality).to eq(80) 
       end
     end
-
+    context "Conjured Item" do
+      it "degrades in quality" do
+        conjured_item = Item.new("item_1",10,50)
+        gilded_rose = GildedRose.new([conjured_item])
+        expect{gilded_rose.update_quality}.to change{conjured_item.quality}.from(50).to(48)
+      end
+      it "decreases sell_in count" do
+        conjured_item = Item.new("item_1",10,50)
+        gilded_rose = GildedRose.new([conjured_item])
+        expect{gilded_rose.update_quality}.to change{conjured_item.sell_in}.from(10).to(9)
+      end
+      it "never sets quality to less than 0" do
+        conjured_item = Item.new("item_1",10,50)
+        gilded_rose = GildedRose.new([conjured_item])
+        51.times{gilded_rose.update_quality}
+        expect(conjured_item.quality).to eq(0) 
+      end
+      context "sell date has passsed" do
+        it "degrades in quality twice as fast" do
+          conjured_item = Item.new("item_1",-1,50)
+          gilded_rose = GildedRose.new([conjured_item])
+          expect{gilded_rose.update_quality}.to change{conjured_item.quality}.from(50).to(46)
+        end
+      end
+    end
   end
-
 end
